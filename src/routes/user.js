@@ -75,3 +75,25 @@ user_router.delete('/:id', (req, res) => {
         })
     }
 })
+
+user_router.post('/test', async function (req, res) {
+    try {
+        const { emailFrom, emailTo, emailSubject, emailText } = req.body;
+        await mailService.sendEmail({
+            emailFrom: emailFrom,
+            emailTo: emailTo,
+            emailSubject: emailSubject,
+            emailText: emailText,
+        });
+
+        return res.status(200).json({
+            message: 'reset password email sent successfully',
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'error',
+        });
+    }
+});
+
+
