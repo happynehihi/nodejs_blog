@@ -1,31 +1,30 @@
-import { connection } from './connection.js';
+import { db } from './connection.js'
 
-const createTable = () => {
-    const sql = `
-    CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(255),
-      email VARCHAR(255)
-    )
-  `;
-    connection.query(sql, (err) => {
-        if (err) throw err;
-        console.log('Table created!');
-    });
-};
+const creatSql = `CREATE TABLE users (
+    id INT AUTO_INCREMENT,
+    username VARCHAR(255),
+    password VARCHAR(255),
+    salt VARCHAR(255),
+    name VARCHAR(255),
+    age INT UNSIGNED,
+    gender BOOLEAN,
+    email VARCHAR(255),
+    PRIMARY KEY (id),
+    UNIQUE (username)
+)`
 
-const insertData = () => {
-    const sql = `
-    INSERT INTO users (name, email)
-    VALUES ('Le Thi Phuc', 'thiphuc@gmail.com'),
-           ('Le Phan Hoang Phuc', 'hoangphuc@gmail.com'),
-           ('Le Anh Quoc', 'quoc@gmail.com')
-  `;
-    connection.query(sql, (err) => {
-        if (err) throw err;
-        console.log('Data inserted!');
-    });
-};
+db.query(creatSql, (err) => {
+  if (err) {
+    console.log(err)
+    return
+  }
 
-createTable();
-insertData();
+  db.query(seedSql, (seedErr) => {
+    if (seedErr) {
+      console.log(seedErr)
+      return
+    }
+
+    console.log('Success init database...')
+  })
+})
